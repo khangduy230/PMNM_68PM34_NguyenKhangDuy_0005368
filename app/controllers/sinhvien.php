@@ -33,7 +33,35 @@ class sinhvien extends Controller{
         }
     }
 
+    public function edit($id){
+    $sinhvienModel = $this->model('sinhvienModel');
+    $sinhvien = $sinhvienModel->getSinhvienById($id);
     
+
+    require_once '../app/views/sinhvien/edit.php';
+}
+
+
+    public function update($id){
+        if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST'){
+            $hoten = $_POST['hoten'] ?? '';
+            $mssv = $_POST['mssv'] ?? '';
+            $gioitinh = $_POST['gioitinh'] ?? '';
+
+            
+            $sinhvienModel = $this->model('sinhvienModel');
+            $result = $sinhvienModel->update($id, $hoten, $mssv, $gioitinh);
+            
+            if($result){
+                header("Location: /sinhvien/index");
+                exit();
+            } else {
+                echo "Lỗi khi cập nhật dữ liệu.";
+            }
+        }
+    }
+
+
 
 
 }

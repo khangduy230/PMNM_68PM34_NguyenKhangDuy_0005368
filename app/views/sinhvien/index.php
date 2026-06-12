@@ -19,7 +19,6 @@
             margin: 0 auto;
         }
 
-        /* Thêm vùng bao quanh tiêu đề và nút thêm mới nếu cần */
         .header-area {
             display: flex;
             justify-content: space-between;
@@ -72,7 +71,7 @@
             padding: 12px 16px;
             border-bottom: 1px solid #eef2f3;
             color: #4f5d73;
-            font-size: 15px;
+            font-size: 15px;    
         }
 
         tr:nth-child(even) { background-color: #fdfdfd; }
@@ -93,7 +92,6 @@
         .btn-delete { background-color: #e74c3c; color: #fff; }
         .btn-delete:hover { background-color: #c0392b; }
 
-        /* CSS làm đẹp cho thanh phân trang của bạn */
         .pagination {
             display: flex;
             justify-content: center;

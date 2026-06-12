@@ -3,7 +3,7 @@
 class App
 {
     protected $controller = 'home';
-    protected $action = 'login';
+    protected $action = 'index';
     protected $params = [];
 
     public function __construct()
@@ -34,6 +34,7 @@ class App
         if (isset($_GET['url'])) {
             return explode('/', filter_var(trim($_GET['url'], '/')));
         }
+        return [];
     }
 }
 

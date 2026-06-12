@@ -15,7 +15,11 @@
         <input type="text" name="mssv" id="mssv">
         <br><br>
         <label for="gioitinh">Giới tính</label><br>
-        <input type="text" name="gioitinh" id="gioitinh">
+        <select name="gioitinh" id="gioitinh">
+            <option value="nam">Nam</option>
+            <option value="nữ">Nữ</option>
+            <option value="lgbt">lgbt</option>
+        </select>
         <br><br>
         <input type="submit" value="Thêm sinh viên">
     </form>
