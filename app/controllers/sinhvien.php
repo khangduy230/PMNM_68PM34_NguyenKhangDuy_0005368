@@ -61,7 +61,17 @@ class sinhvien extends Controller{
         }
     }
 
-
+    public function delete($id){
+        $sinhvienModel = $this->model('sinhvienModel');
+        $result = $sinhvienModel->delete($id);
+        
+        if($result){
+            header("Location: /sinhvien/index");
+            exit();
+        } else {
+            echo "Lỗi khi xóa sinh viên.";
+        }
+    }
 
 
 }
