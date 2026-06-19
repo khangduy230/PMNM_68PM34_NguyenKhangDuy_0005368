@@ -1,8 +1,9 @@
 <?php
 require_once '../app/core/Controller.php';
 class sinhvien extends Controller{
-    public function index($limit = 5, $offset = 0) {
-        $limit = is_numeric($limit) ? (int)$limit : 5;
+    public function index($limit = null, $offset = 0) {
+        $chosenPageSize = $_GET['pageSize'] ?? $limit;
+        $limit = is_numeric($chosenPageSize) ? (int)$chosenPageSize : 5;
         $offset = is_numeric($offset) ? (int)$offset : 0;
 
         $search = $_GET['search'] ?? "";
@@ -21,7 +22,8 @@ class sinhvien extends Controller{
             'totalPage' => $totalPage,
             'search' => $search,
             'sortBy' => $sortBy,
-            'sortOrder' => $sortOrder
+            'sortOrder' => $sortOrder,
+            'pageSize' => $limit 
         ]);
     }
     public function create() {

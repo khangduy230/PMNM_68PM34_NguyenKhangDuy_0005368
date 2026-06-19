@@ -48,12 +48,41 @@
         margin: 0;
     }
 
+    .pagesize-container {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding-right: 8px;
+        border-right: 1px solid #cbd5e1;
+    }
+
+    .pagesize-input {
+        width: 50px;
+        padding: 5px;
+        border: 1px solid #cbd5e1;
+        border-radius: 4px;
+        font-size: 13px;
+        color: #334155;
+        text-align: center;
+        outline: none;
+    }
+
+    .pagesize-input:focus {
+        border-color: #3498db;
+    }
+
+    .pagesize-label {
+        font-size: 13px;
+        color: #64748b;
+        white-space: nowrap;
+    }
+
     .search-input {
         padding: 6px 10px;
         border: none;
         font-size: 14px;
         color: #334155;
-        width: 280px;
+        width: 250px;
         outline: none;
     }
 
@@ -214,6 +243,11 @@
         
         <div class="toolbar-area">
             <form action="/sinhvien/index" method="GET" class="search-form">
+                <div class="pagesize-container">
+                    <input type="number" name="pageSize" class="pagesize-input" min="1" max="100" value="<?php echo htmlspecialchars($pageSize ?? 5); ?>" onchange="this.form.submit()">
+                    <span class="pagesize-label">dòng/Trang</span>
+                </div>
+                
                 <input type="text" name="search" class="search-input" placeholder="Tìm theo tên, mssv, lớp..." value="<?php echo htmlspecialchars($search ?? ''); ?>">
                 <input type="hidden" name="sortBy" value="<?php echo htmlspecialchars($sortBy ?? 'id'); ?>">
                 <input type="hidden" name="sortOrder" value="<?php echo htmlspecialchars($sortOrder ?? 'ASC'); ?>">
@@ -237,8 +271,9 @@
                             if ($sortBy === 'hoten') {
                                 $iconText = $sortOrder === 'ASC' ? '<span class="sort-icon active">▲</span>' : '<span class="sort-icon active">▼</span>';
                             }
+                            $currentSize = isset($pageSize) ? $pageSize : 5;
                         ?>
-                        <a href="/sinhvien/index/5/0?search=<?php echo urlencode($search ?? ''); ?>&sortBy=hoten&sortOrder=<?php echo $nextOrderText; ?>">
+                        <a href="/sinhvien/index/<?php echo $currentSize; ?>/0?search=<?php echo urlencode($search ?? ''); ?>&sortBy=hoten&sortOrder=<?php echo $nextOrderText; ?>&pageSize=<?php echo $currentSize; ?>">
                             <span>Họ và Tên</span>
                             <?php echo $iconText; ?>
                         </a>
@@ -250,8 +285,9 @@
                             if ($sortBy === 'mssv') {
                                 $iconMssv = $sortOrder === 'ASC' ? '<span class="sort-icon active">▲</span>' : '<span class="sort-icon active">▼</span>';
                             }
+                            $currentSize = isset($pageSize) ? $pageSize : 5;
                         ?>
-                        <a href="/sinhvien/index/5/0?search=<?php echo urlencode($search ?? ''); ?>&sortBy=mssv&sortOrder=<?php echo $nextOrderMssv; ?>">
+                        <a href="/sinhvien/index/<?php echo $currentSize; ?>/0?search=<?php echo urlencode($search ?? ''); ?>&sortBy=mssv&sortOrder=<?php echo $nextOrderMssv; ?>&pageSize=<?php echo $currentSize; ?>">
                             <span>MSSV</span>
                             <?php echo $iconMssv; ?>
                         </a>
@@ -300,13 +336,13 @@
         <div class="pagination">
             <?php
                 if (isset($totalPage) && $totalPage > 1) {
-                    $pageSize = 5;
-                    $sortParams = "&sortBy=" . urlencode($sortBy ?? 'id') . "&sortOrder=" . urlencode($sortOrder ?? 'ASC');
+                    $activeSize = isset($pageSize) ? $pageSize : 5;
+                    $sortParams = "&sortBy=" . urlencode($sortBy ?? 'id') . "&sortOrder=" . urlencode($sortOrder ?? 'ASC') . "&pageSize=" . urlencode($activeSize);
                     $searchQuery = "?search=" . urlencode($search ?? '') . $sortParams;
                     
                     for ($i = 1; $i <= $totalPage; $i++) {
-                        $offset = ($i - 1) * $pageSize;
-                        echo "<a href='/sinhvien/index/$pageSize/$offset$searchQuery'>$i</a>";
+                        $offset = ($i - 1) * $activeSize;
+                        echo "<a href='/sinhvien/index/$activeSize/$offset$searchQuery'>$i</a>";
                     }
                 }
             ?>

@@ -2,13 +2,26 @@
 require_once '../app/core/Controller.php';
 
 class lophoc extends Controller {
-    public function index($limit = 5, $offset = 0, $search = ""){
-            $lophocModel = $this->model('lophocModel');
-            $results = $lophocModel->paging($limit, $offset, $search);
-            $lophocs = $results['lophocs'];
-            $totalPage = $results['totalPage'];
-            //trả về view
-            $this->view("layout/masterlayout", ['viewname' => 'lophoc/index', 'lophocs' => $lophocs, 'title' => 'Quản lý lớp học', 'totalPage' => $totalPage]);
+    public function index($limit = null, $offset = 0) {
+        $chosenPageSize = $_GET['pageSize'] ?? $limit;
+        $limit = is_numeric($chosenPageSize) ? (int)$chosenPageSize : 5;
+        $offset = is_numeric($offset) ? (int)$offset : 0;
+
+        $search = $_GET['search'] ?? "";
+        
+        $lophocModel = $this->model('lophocModel');
+        $results = $lophocModel->paging($limit, $offset, $search);
+        $lophocs = $results['lophocs'];
+        $totalPage = $results['totalPage'];
+
+        $this->view("layout/masterlayout", [
+            'viewname' => 'lophoc/index', 
+            'lophocs' => $lophocs, 
+            'title' => 'Quản lý lớp học', 
+            'totalPage' => $totalPage,
+            'search' => $search,
+            'pageSize' => $limit
+        ]);
     }
 
     public function create(){
@@ -39,10 +52,8 @@ class lophoc extends Controller {
         }
     }
 
-
     public function edit($id){
         $lophocModel = $this->model('lophocModel');
-        
         $lop = $lophocModel->getLopHocById($id);
         
         if(!$lop) {
@@ -56,7 +67,6 @@ class lophoc extends Controller {
             'title' => 'Chỉnh sửa lớp học'
         ]);
     }
-
 
     public function update($id){
         if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST'){
