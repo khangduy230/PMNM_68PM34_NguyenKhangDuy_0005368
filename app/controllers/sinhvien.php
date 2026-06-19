@@ -10,9 +10,14 @@ class sinhvien extends Controller{
         $this->view("layout/masterlayout", ['viewname' => 'sinhvien/index', 'sinhviens' => $sinhviens, 'title' => 'Danh sách sinh viên', 'totalPage' => $totalPage]);
     }
     public function create(){
+        $lophocModel = $this->model('lophocModel');
+        $lophocs = $lophocModel->getAll(); 
+        
+        require_once '../app/views/partial/header.php';
         require_once '../app/views/sinhvien/create.php';
-
+        require_once '../app/views/partial/footer.php';
     }
+
 
     public function store(){
         if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST'){
