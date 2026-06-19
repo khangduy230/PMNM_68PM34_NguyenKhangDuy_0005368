@@ -26,22 +26,38 @@ class sinhvienModel {
         return $stmt->execute();
     }
 
-    public function paging($limit = 5, $offset = 0, $search=""){
-
+    public function paging($limit = 5, $offset = 0, $search = "") {
+        $searchParam = "%" . $search . "%";
+        
         $query = "SELECT sv.*, lp.tenlop 
-                  FROM tbl_sinhviens sv 
-                  LEFT JOIN tbl_lops lp ON sv.malop = lp.malop 
-                  LIMIT :limit OFFSET :offset";
+                FROM tbl_sinhviens sv 
+                LEFT JOIN tbl_lops lp ON sv.malop = lp.malop 
+                WHERE sv.mssv LIKE :search 
+                    OR sv.hoten LIKE :search 
+                    OR sv.malop LIKE :search 
+                    OR lp.tenlop LIKE :search
+                LIMIT :limit OFFSET :offset";
+                
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
         $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $stmt->bindParam(':search', $searchParam, PDO::PARAM_STR);
         $stmt->execute();
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        $selectAllQuery = $this->conn->prepare("SELECT COUNT(*) FROM tbl_sinhviens");
+        $countQuery = "SELECT COUNT(*) FROM tbl_sinhviens sv 
+                    LEFT JOIN tbl_lops lp ON sv.malop = lp.malop 
+                    WHERE sv.mssv LIKE :search 
+                        OR sv.hoten LIKE :search 
+                        OR sv.malop LIKE :search 
+                        OR lp.tenlop LIKE :search";
+                        
+        $selectAllQuery = $this->conn->prepare($countQuery);
+        $selectAllQuery->bindParam(':search', $searchParam, PDO::PARAM_STR);
         $selectAllQuery->execute();
         $totalRecord = $selectAllQuery->fetchColumn();
         $totalPage = ceil($totalRecord / $limit);
+        
         return ['sinhviens' => $results, 'totalPage' => $totalPage];
     }
 

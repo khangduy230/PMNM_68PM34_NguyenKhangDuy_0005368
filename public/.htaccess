@@ -1,8 +1,8 @@
+Options +FollowSymLinks
 RewriteEngine On
 
-Options -Indexes
-
+RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond  %{REQUEST_FILENAME} !-d
 
-RewriteRule ^(.*)$ index.php?url=$1
+# Đảm bảo có [L,QSA] ở cuối để nối các tham số tìm kiếm vào URL
+RewriteRule ^(.*)$ index.php?url=$1 [L,QSA]

@@ -13,22 +13,13 @@
     }
 
     .content-container {
-        padding: 30px; 
-        padding-bottom: 100px; 
-        max-width: 95%; 
+        padding: 0px 30px 100px 30px; 
         margin: 0 auto;
     }
 
-    .header-area {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-
-    h1 {
+    .page-title {
         color: #2c3e50;
-        margin: 0;
+        margin: 0 0 20px 0; 
         font-size: 26px;
         font-weight: 600;
         border-bottom: 2px solid #3498db;
@@ -36,15 +27,67 @@
         display: inline-block;
     }
 
+    .toolbar-area {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        gap: 15px;
+    }
+
+    .search-form {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        background: #fff;
+        padding: 4px 6px;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        margin: 0;
+    }
+
+    .search-input {
+        padding: 6px 10px;
+        border: none;
+        font-size: 14px;
+        color: #334155;
+        width: 280px;
+        outline: none;
+    }
+
+    .btn-search {
+        background-color: #3498db;
+        color: white;
+        border: none;
+        padding: 7px 16px;
+        border-radius: 4px;
+        font-weight: 600;
+        font-size: 13px;
+        cursor: pointer;
+        transition: background 0.2s;
+        white-space: nowrap;
+    }
+
+    .btn-search:hover {
+        background-color: #2980b9;
+    }
+
     .btn-add {
         background-color: #2ecc71;
         color: white;
         text-decoration: none;
-        padding: 10px 15px;
-        border-radius: 5px;
+        padding: 0 16px;
+        border-radius: 6px;
         font-weight: bold;
         font-size: 14px;
+        box-shadow: 0 2px 4px rgba(46, 204, 113, 0.2);
         transition: background 0.2s;
+        white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+        height: 38px;
+        box-sizing: border-box;
     }
     .btn-add:hover { background-color: #27ae60; }
 
@@ -131,8 +174,19 @@
 <body>
     <div class="content-container">
         
-        <div class="header-area">
-            <h1>Danh sách sinh viên</h1>
+        <div>
+            <h1 class="page-title">Danh sách sinh viên</h1>
+        </div>
+        
+        <div class="toolbar-area">
+            <form action="/sinhvien/index" method="GET" class="search-form">
+                <input type="text" name="search" class="search-input" placeholder="Tìm theo tên, mssv, lớp..." value="<?php echo htmlspecialchars($search ?? ''); ?>">
+                <button type="submit" class="btn-search">Tìm kiếm</button>
+                <?php if(!empty($search)): ?>
+                    <a href="/sinhvien/index" style="color: #64748b; text-decoration: none; font-size: 13px; margin: 0 5px 0 5px; white-space: nowrap;">Xóa bộ lọc</a>
+                <?php endif; ?>
+            </form>
+
             <a href="/sinhvien/create" class="btn-add">+ Thêm sinh viên</a>
         </div>
 
@@ -177,7 +231,7 @@
                 else: 
                 ?>
                 <tr>
-                    <td colspan="7" style="text-align: center; padding: 20px;">Không có dữ liệu sinh viên.</td>
+                    <td colspan="7" style="text-align: center; padding: 30px; color: #94a3b8;">Không có dữ liệu sinh viên.</td>
                 </tr>
                 <?php endif; ?>
             </tbody>
@@ -187,9 +241,10 @@
             <?php
                 if (isset($totalPage) && $totalPage > 1) {
                     $pageSize = 5;
+                    $searchQuery = !empty($search) ? "?search=" . urlencode($search) : "";
                     for ($i = 1; $i <= $totalPage; $i++) {
                         $offset = ($i - 1) * $pageSize;
-                        echo "<a href='/sinhvien/index/$pageSize/$offset'>$i</a>";
+                        echo "<a href='/sinhvien/index/$pageSize/$offset$searchQuery'>$i</a>";
                     }
                 }
             ?>

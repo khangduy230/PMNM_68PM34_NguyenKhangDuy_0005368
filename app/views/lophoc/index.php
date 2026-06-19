@@ -13,9 +13,8 @@
         }
 
         .content-container {
-            padding: 30px; 
-            padding-bottom: 100px; 
-            max-width: 95%;
+            padding: 10px 30px 100px 30px; 
+            max-width: 95%; 
             margin: 0 auto;
         }
 

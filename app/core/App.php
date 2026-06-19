@@ -35,11 +35,13 @@ class App
         call_user_func_array([$this->controller, $this->action], $this->params);
     }
     public function UrlProcess(){
-        if (isset($_GET['url'])) {
-            return explode('/', filter_var(trim($_GET['url'], '/')));
-        }
-        return [];
+    if (isset($_GET['url'])) {
+        // Sử dụng strtok để cắt bỏ toàn bộ phần từ dấu hỏi chấm (?) trở đi nếu có
+        $urlWithoutQuery = strtok($_GET['url'], '?');
+        return explode('/', filter_var(trim($urlWithoutQuery, '/')));
     }
+    return [];
+}
 }
 
 ?>
