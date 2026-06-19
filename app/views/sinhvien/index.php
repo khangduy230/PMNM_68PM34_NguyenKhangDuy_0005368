@@ -13,7 +13,8 @@
     }
 
     .content-container {
-        padding: 0px 30px 100px 30px; 
+        padding: 10px 30px 100px 30px; 
+        max-width: 95%;
         margin: 0 auto;
     }
 
@@ -105,9 +106,42 @@
         background-color: #3498db;
         color: white;
         font-weight: 600;
-        padding: 14px 12px; 
+        padding: 0;
         text-transform: uppercase;
         font-size: 13px;
+    }
+
+    th.sortable-th a {
+        color: white !important;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+        padding: 14px 12px;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+        transition: background-color 0.2s;
+        cursor: pointer;
+    }
+
+    th.sortable-th a:hover {
+        background-color: #2980b9;
+    }
+
+    th.normal-th {
+        padding: 14px 12px;
+    }
+
+    .sort-icon {
+        font-size: 11px;
+        opacity: 0.6;
+    }
+
+    .sort-icon.active {
+        opacity: 1;
+        color: #fff;
     }
 
     td {
@@ -181,6 +215,8 @@
         <div class="toolbar-area">
             <form action="/sinhvien/index" method="GET" class="search-form">
                 <input type="text" name="search" class="search-input" placeholder="Tìm theo tên, mssv, lớp..." value="<?php echo htmlspecialchars($search ?? ''); ?>">
+                <input type="hidden" name="sortBy" value="<?php echo htmlspecialchars($sortBy ?? 'id'); ?>">
+                <input type="hidden" name="sortOrder" value="<?php echo htmlspecialchars($sortOrder ?? 'ASC'); ?>">
                 <button type="submit" class="btn-search">Tìm kiếm</button>
                 <?php if(!empty($search)): ?>
                     <a href="/sinhvien/index" style="color: #64748b; text-decoration: none; font-size: 13px; margin: 0 5px 0 5px; white-space: nowrap;">Xóa bộ lọc</a>
@@ -193,13 +229,37 @@
         <table>
             <thead>
                 <tr>
-                    <th>STT</th>
-                    <th>Tên</th>
-                    <th>MSSV</th>
-                    <th>Giới tính</th>
-                    <th>Mã lớp</th>
-                    <th>Tên lớp</th>
-                    <th>Thao tác</th>
+                    <th class="normal-th" style="text-align: center;">STT</th>
+                    <th class="sortable-th">
+                        <?php 
+                            $nextOrderText = ($sortBy === 'hoten' && $sortOrder === 'ASC') ? 'DESC' : 'ASC';
+                            $iconText = '<span class="sort-icon">↕</span>';
+                            if ($sortBy === 'hoten') {
+                                $iconText = $sortOrder === 'ASC' ? '<span class="sort-icon active">▲</span>' : '<span class="sort-icon active">▼</span>';
+                            }
+                        ?>
+                        <a href="/sinhvien/index/5/0?search=<?php echo urlencode($search ?? ''); ?>&sortBy=hoten&sortOrder=<?php echo $nextOrderText; ?>">
+                            <span>Họ và Tên</span>
+                            <?php echo $iconText; ?>
+                        </a>
+                    </th>
+                    <th class="sortable-th">
+                        <?php 
+                            $nextOrderMssv = ($sortBy === 'mssv' && $sortOrder === 'ASC') ? 'DESC' : 'ASC';
+                            $iconMssv = '<span class="sort-icon">↕</span>';
+                            if ($sortBy === 'mssv') {
+                                $iconMssv = $sortOrder === 'ASC' ? '<span class="sort-icon active">▲</span>' : '<span class="sort-icon active">▼</span>';
+                            }
+                        ?>
+                        <a href="/sinhvien/index/5/0?search=<?php echo urlencode($search ?? ''); ?>&sortBy=mssv&sortOrder=<?php echo $nextOrderMssv; ?>">
+                            <span>MSSV</span>
+                            <?php echo $iconMssv; ?>
+                        </a>
+                    </th>
+                    <th class="normal-th">Giới tính</th>
+                    <th class="normal-th">Mã lớp</th>
+                    <th class="normal-th">Tên lớp</th>
+                    <th class="normal-th" style="text-align: center;">Thao tác</th>
                 </tr>
             </thead>
             <tbody>
@@ -241,7 +301,9 @@
             <?php
                 if (isset($totalPage) && $totalPage > 1) {
                     $pageSize = 5;
-                    $searchQuery = !empty($search) ? "?search=" . urlencode($search) : "";
+                    $sortParams = "&sortBy=" . urlencode($sortBy ?? 'id') . "&sortOrder=" . urlencode($sortOrder ?? 'ASC');
+                    $searchQuery = "?search=" . urlencode($search ?? '') . $sortParams;
+                    
                     for ($i = 1; $i <= $totalPage; $i++) {
                         $offset = ($i - 1) * $pageSize;
                         echo "<a href='/sinhvien/index/$pageSize/$offset$searchQuery'>$i</a>";

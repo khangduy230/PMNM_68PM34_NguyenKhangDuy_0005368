@@ -6,9 +6,11 @@ class sinhvien extends Controller{
         $offset = is_numeric($offset) ? (int)$offset : 0;
 
         $search = $_GET['search'] ?? "";
-        
+        $sortBy = $_GET['sortBy'] ?? "id";       
+        $sortOrder = $_GET['sortOrder'] ?? "ASC"; 
+
         $sinhvienModel = $this->model('sinhvienModel');
-        $results = $sinhvienModel->paging($limit, $offset, $search);
+        $results = $sinhvienModel->paging($limit, $offset, $search, $sortBy, $sortOrder);
         $sinhviens = $results['sinhviens'];
         $totalPage = $results['totalPage'];
         
@@ -17,7 +19,9 @@ class sinhvien extends Controller{
             'sinhviens' => $sinhviens, 
             'title' => 'Quản lý sinh viên', 
             'totalPage' => $totalPage,
-            'search' => $search
+            'search' => $search,
+            'sortBy' => $sortBy,
+            'sortOrder' => $sortOrder
         ]);
     }
     public function create() {

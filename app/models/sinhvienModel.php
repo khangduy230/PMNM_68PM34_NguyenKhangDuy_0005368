@@ -26,9 +26,18 @@ class sinhvienModel {
         return $stmt->execute();
     }
 
-    public function paging($limit = 5, $offset = 0, $search = "") {
-        $searchParam = "%" . $search . "%";
-        
+    public function paging($limit = 5, $offset = 0, $search = "", $sortBy = "id", $sortOrder = "ASC") {
+    $searchParam = "%" . $search . "%";
+    
+    $validSortColumns = ['id', 'hoten', 'mssv', 'gioitinh', 'malop', 'tenlop'];
+    $sortBy = in_array($sortBy, $validSortColumns) ? $sortBy : 'id';
+    $sortOrder = strtoupper($sortOrder) === 'DESC' ? 'DESC' : 'ASC';
+    
+    $orderColumn = $sortBy;
+        if ($sortBy === 'hoten') $orderColumn = 'sv.hoten';
+        if ($sortBy === 'mssv') $orderColumn = 'sv.mssv';
+        if ($sortBy === 'malop') $orderColumn = 'sv.malop';
+
         $query = "SELECT sv.*, lp.tenlop 
                 FROM tbl_sinhviens sv 
                 LEFT JOIN tbl_lops lp ON sv.malop = lp.malop 
@@ -36,6 +45,7 @@ class sinhvienModel {
                     OR sv.hoten LIKE :search 
                     OR sv.malop LIKE :search 
                     OR lp.tenlop LIKE :search
+                ORDER BY $orderColumn $sortOrder
                 LIMIT :limit OFFSET :offset";
                 
         $stmt = $this->conn->prepare($query);
