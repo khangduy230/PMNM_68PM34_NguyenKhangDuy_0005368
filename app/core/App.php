@@ -1,5 +1,9 @@
 
 <?php
+
+require_once 'Controller.php'; 
+require_once 'DB.php';
+
 class App
 {
     protected $controller = 'home';
