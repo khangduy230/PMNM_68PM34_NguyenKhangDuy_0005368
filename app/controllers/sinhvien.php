@@ -9,13 +9,15 @@ class sinhvien extends Controller{
         //trả về view
         $this->view("layout/masterlayout", ['viewname' => 'sinhvien/index', 'sinhviens' => $sinhviens, 'title' => 'Danh sách sinh viên', 'totalPage' => $totalPage]);
     }
-    public function create(){
+    public function create() {
         $lophocModel = $this->model('lophocModel');
         $lophocs = $lophocModel->getAll(); 
-        
-        require_once '../app/views/partial/header.php';
-        require_once '../app/views/sinhvien/create.php';
-        require_once '../app/views/partial/footer.php';
+
+        $this->view("layout/masterlayout", [
+            'viewname' => 'sinhvien/create',
+            'lophocs' => $lophocs,
+            'title' => 'Thêm sinh viên mới'
+        ]);
     }
 
 
@@ -24,11 +26,12 @@ class sinhvien extends Controller{
             $hoten = $_POST['hoten'] ?? '';
             $mssv = $_POST['mssv'] ?? '';
             $gioitinh = $_POST['gioitinh'] ?? '';
+            $malop = $_POST['malop'] ?? '';
             
             $sinhvienModel = $this->model('sinhvienModel');
-            
-            $result = $sinhvienModel->create($hoten, $mssv, $gioitinh);
-            
+
+            $result = $sinhvienModel->create($hoten, $mssv, $gioitinh, $malop);
+
             if($result){
             header("Location: /sinhvien/index"); 
             exit();
@@ -38,13 +41,20 @@ class sinhvien extends Controller{
         }
     }
 
-    public function edit($id){
-    $sinhvienModel = $this->model('sinhvienModel');
-    $sinhvien = $sinhvienModel->getSinhvienById($id);
-    
+    public function edit($id) {
+        $sinhvienModel = $this->model('sinhvienModel');
+        $sinhvien = $sinhvienModel->getSinhvienById($id);
 
-    require_once '../app/views/sinhvien/edit.php';
-}
+        $lophocModel = $this->model('lophocModel');
+        $lophocs = $lophocModel->getAll();
+
+        $this->view("layout/masterlayout", [
+            'viewname' => 'sinhvien/edit',
+            'sinhvien' => $sinhvien,
+            'lophocs' => $lophocs,
+            'title' => 'Chỉnh sửa sinh viên'
+        ]);
+    }
 
 
     public function update($id){
@@ -52,11 +62,11 @@ class sinhvien extends Controller{
             $hoten = $_POST['hoten'] ?? '';
             $mssv = $_POST['mssv'] ?? '';
             $gioitinh = $_POST['gioitinh'] ?? '';
-
+            $malop = $_POST['malop'] ?? '';
             
             $sinhvienModel = $this->model('sinhvienModel');
-            $result = $sinhvienModel->update($id, $hoten, $mssv, $gioitinh);
-            
+            $result = $sinhvienModel->update($id, $hoten, $mssv, $gioitinh, $malop);
+
             if($result){
                 header("Location: /sinhvien/index");
                 exit();

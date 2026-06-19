@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo isset($title) ? $title : 'Danh sách sinh viên'; ?></title>
+    <title><?php echo isset($title) ? $title : 'Danh sách lớp học'; ?></title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -15,7 +15,7 @@
         .content-container {
             padding: 30px; 
             padding-bottom: 100px; 
-            max-width: 1200px;
+            max-width: 95%;
             margin: 0 auto;
         }
 
@@ -29,7 +29,7 @@
         h1 {
             color: #2c3e50;
             margin: 0;
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 600;
             border-bottom: 2px solid #3498db;
             padding-bottom: 10px;
@@ -62,43 +62,43 @@
             background-color: #3498db;
             color: white;
             font-weight: 600;
-            padding: 14px 16px;
+            padding: 14px 12px;
             text-transform: uppercase;
             font-size: 13px;
         }
 
         td {
-            padding: 12px 16px;
+            padding: 14px 12px;
             border-bottom: 1px solid #eef2f3;
             color: #4f5d73;
-            font-size: 15px;    
+            font-size: 14px;    
+            white-space: nowrap;
         }
 
         tr:nth-child(even) { background-color: #fdfdfd; }
         tr:hover td { background-color: #f1f7fc; cursor: pointer; }
-        td:first-child, th:first-child { text-align: center; width: 70px; }
+        td:first-child, th:first-child { text-align: center; width: 60px; }
 
-        
         .action-links {
             text-align: center;
-            width: 160px; 
+            width: 140px;
         }
 
         .action-links-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 8px; 
+            gap: 6px;
         }
 
         .action-links a {
             text-decoration: none;
-            padding: 6px 12px;
+            padding: 5px 10px;
             border-radius: 4px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
-            display: inline-block; 
-            white-space: nowrap; 
+            display: inline-block;
+            white-space: nowrap;
         }
         .btn-edit { background-color: #f1c40f; color: #fff; }
         .btn-edit:hover { background-color: #f39c12; }
@@ -158,7 +158,7 @@
                 <tr>
                     <td><?php echo $stt++; ?></td>
                     <input type="hidden" value="<?php echo $lop['id']; ?>">
-                    <td><?php echo htmlspecialchars($lop['malop']); ?></td>
+                    <td style="font-weight: bold;"><?php echo htmlspecialchars($lop['malop']); ?></td>
                     <td><?php echo htmlspecialchars($lop['tenlop']); ?></td>
                     <td><?php echo htmlspecialchars($lop['ghichu']); ?></td>
                     <td class="action-links">
